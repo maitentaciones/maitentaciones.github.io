@@ -1,0 +1,427 @@
+[
+  {
+    "id": 1,
+    "slug": "tamano",
+    "name": "Tamaño",
+    "helper": "Definí para cuánta gente es. Este paso fija el precio base.",
+    "kind": "single",
+    "required": true,
+    "max_choices": 1,
+    "is_base_price": true,
+    "position": 1,
+    "active": true,
+    "options": [
+      {
+        "id": 1,
+        "name": "10 porciones",
+        "description": "Molde de 20 cm",
+        "price_delta": 30000.0,
+        "swatch": "#F2C6C2",
+        "image_url": "",
+        "active": true,
+        "position": 1,
+        "group_id": 1
+      },
+      {
+        "id": 2,
+        "name": "15 porciones",
+        "description": "Molde de 24 cm",
+        "price_delta": 42000.0,
+        "swatch": "#E9A8A2",
+        "image_url": "",
+        "active": true,
+        "position": 2,
+        "group_id": 1
+      },
+      {
+        "id": 3,
+        "name": "25 porciones",
+        "description": "Molde de 28 cm",
+        "price_delta": 58000.0,
+        "swatch": "#D98C86",
+        "image_url": "",
+        "active": true,
+        "position": 3,
+        "group_id": 1
+      },
+      {
+        "id": 4,
+        "name": "40 porciones",
+        "description": "Dos pisos",
+        "price_delta": 89000.0,
+        "swatch": "#C46F69",
+        "image_url": "",
+        "active": true,
+        "position": 4,
+        "group_id": 1
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "bizcochuelo",
+    "name": "Bizcochuelo",
+    "helper": "La base de tu torta.",
+    "kind": "single",
+    "required": true,
+    "max_choices": 1,
+    "is_base_price": false,
+    "position": 2,
+    "active": true,
+    "options": [
+      {
+        "id": 5,
+        "name": "Vainilla",
+        "description": "Clásico y esponjoso",
+        "price_delta": 0.0,
+        "swatch": "#F4E4C1",
+        "image_url": "",
+        "active": true,
+        "position": 1,
+        "group_id": 2
+      },
+      {
+        "id": 6,
+        "name": "Chocolate",
+        "description": "Cacao amargo, bien húmedo",
+        "price_delta": 2500.0,
+        "swatch": "#6B4A3A",
+        "image_url": "",
+        "active": true,
+        "position": 2,
+        "group_id": 2
+      },
+      {
+        "id": 7,
+        "name": "Red velvet",
+        "description": "Aterciopelado, color rubí",
+        "price_delta": 4000.0,
+        "swatch": "#A93B3B",
+        "image_url": "",
+        "active": true,
+        "position": 3,
+        "group_id": 2
+      },
+      {
+        "id": 8,
+        "name": "Limón",
+        "description": "Con ralladura fresca",
+        "price_delta": 2500.0,
+        "swatch": "#E8DC8A",
+        "image_url": "",
+        "active": true,
+        "position": 4,
+        "group_id": 2
+      },
+      {
+        "id": 9,
+        "name": "Zanahoria y nuez",
+        "description": "Especiado con canela",
+        "price_delta": 4500.0,
+        "swatch": "#D79A5B",
+        "image_url": "",
+        "active": true,
+        "position": 5,
+        "group_id": 2
+      },
+      {
+        "id": 10,
+        "name": "Sin TACC",
+        "description": "Zona libre de gluten",
+        "price_delta": 7000.0,
+        "swatch": "#CBBFA8",
+        "image_url": "",
+        "active": true,
+        "position": 6,
+        "group_id": 2
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "relleno",
+    "name": "Relleno",
+    "helper": "Podés combinar hasta dos capas distintas.",
+    "kind": "multi",
+    "required": true,
+    "max_choices": 2,
+    "is_base_price": false,
+    "position": 3,
+    "active": true,
+    "options": [
+      {
+        "id": 11,
+        "name": "Dulce de leche repostero",
+        "description": "",
+        "price_delta": 0.0,
+        "swatch": "#B07A4E",
+        "image_url": "",
+        "active": true,
+        "position": 1,
+        "group_id": 3
+      },
+      {
+        "id": 12,
+        "name": "Crema de queso",
+        "description": "",
+        "price_delta": 2000.0,
+        "swatch": "#F5EFE3",
+        "image_url": "",
+        "active": true,
+        "position": 2,
+        "group_id": 3
+      },
+      {
+        "id": 13,
+        "name": "Ganache de chocolate",
+        "description": "",
+        "price_delta": 3500.0,
+        "swatch": "#4A2E24",
+        "image_url": "",
+        "active": true,
+        "position": 3,
+        "group_id": 3
+      },
+      {
+        "id": 14,
+        "name": "Frutos rojos frescos",
+        "description": "",
+        "price_delta": 5000.0,
+        "swatch": "#8E2C3F",
+        "image_url": "",
+        "active": true,
+        "position": 4,
+        "group_id": 3
+      },
+      {
+        "id": 15,
+        "name": "Curd de limón",
+        "description": "",
+        "price_delta": 3000.0,
+        "swatch": "#E6D75C",
+        "image_url": "",
+        "active": true,
+        "position": 5,
+        "group_id": 3
+      },
+      {
+        "id": 16,
+        "name": "Crema de pistacho",
+        "description": "",
+        "price_delta": 6500.0,
+        "swatch": "#93A96A",
+        "image_url": "",
+        "active": true,
+        "position": 6,
+        "group_id": 3
+      },
+      {
+        "id": 17,
+        "name": "Durazno en almíbar",
+        "description": "",
+        "price_delta": 2500.0,
+        "swatch": "#E8A55C",
+        "image_url": "",
+        "active": true,
+        "position": 7,
+        "group_id": 3
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "cobertura",
+    "name": "Cobertura",
+    "helper": "Cómo se ve por fuera.",
+    "kind": "single",
+    "required": true,
+    "max_choices": 1,
+    "is_base_price": false,
+    "position": 4,
+    "active": true,
+    "options": [
+      {
+        "id": 18,
+        "name": "Buttercream liso",
+        "description": "Terminación prolija y mate",
+        "price_delta": 0.0,
+        "swatch": "#F3E3D7",
+        "image_url": "",
+        "active": true,
+        "position": 1,
+        "group_id": 4
+      },
+      {
+        "id": 19,
+        "name": "Naked cake",
+        "description": "Bizcocho a la vista",
+        "price_delta": 0.0,
+        "swatch": "#E2C9A6",
+        "image_url": "",
+        "active": true,
+        "position": 2,
+        "group_id": 4
+      },
+      {
+        "id": 20,
+        "name": "Drip de chocolate",
+        "description": "Chorreado sobre los bordes",
+        "price_delta": 4000.0,
+        "swatch": "#3E2A21",
+        "image_url": "",
+        "active": true,
+        "position": 3,
+        "group_id": 4
+      },
+      {
+        "id": 21,
+        "name": "Merengue italiano quemado",
+        "description": "",
+        "price_delta": 5000.0,
+        "swatch": "#F6EDD9",
+        "image_url": "",
+        "active": true,
+        "position": 4,
+        "group_id": 4
+      },
+      {
+        "id": 22,
+        "name": "Fondant",
+        "description": "Superficie lisa para diseños",
+        "price_delta": 9000.0,
+        "swatch": "#DCD3E8",
+        "image_url": "",
+        "active": true,
+        "position": 5,
+        "group_id": 4
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "slug": "decoracion",
+    "name": "Decoración",
+    "helper": "Sumá los detalles que quieras.",
+    "kind": "multi",
+    "required": false,
+    "max_choices": 4,
+    "is_base_price": false,
+    "position": 5,
+    "active": true,
+    "options": [
+      {
+        "id": 23,
+        "name": "Flores naturales",
+        "description": "",
+        "price_delta": 7000.0,
+        "swatch": "#E4A0B7",
+        "image_url": "",
+        "active": true,
+        "position": 1,
+        "group_id": 5
+      },
+      {
+        "id": 24,
+        "name": "Frutas frescas",
+        "description": "",
+        "price_delta": 5000.0,
+        "swatch": "#C2453F",
+        "image_url": "",
+        "active": true,
+        "position": 2,
+        "group_id": 5
+      },
+      {
+        "id": 25,
+        "name": "Topper personalizado",
+        "description": "Con el nombre y la edad",
+        "price_delta": 4500.0,
+        "swatch": "#D4AF7A",
+        "image_url": "",
+        "active": true,
+        "position": 3,
+        "group_id": 5
+      },
+      {
+        "id": 26,
+        "name": "Macarons",
+        "description": "",
+        "price_delta": 8000.0,
+        "swatch": "#EBC3D3",
+        "image_url": "",
+        "active": true,
+        "position": 4,
+        "group_id": 5
+      },
+      {
+        "id": 27,
+        "name": "Chocolates y grageas",
+        "description": "",
+        "price_delta": 3500.0,
+        "swatch": "#6B4A3A",
+        "image_url": "",
+        "active": true,
+        "position": 5,
+        "group_id": 5
+      },
+      {
+        "id": 28,
+        "name": "Velas y chispero",
+        "description": "",
+        "price_delta": 2000.0,
+        "swatch": "#F0E68C",
+        "image_url": "",
+        "active": true,
+        "position": 6,
+        "group_id": 5
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "slug": "extras",
+    "name": "Detalles finales",
+    "helper": "Opcional, pero hacen la diferencia.",
+    "kind": "multi",
+    "required": false,
+    "max_choices": 3,
+    "is_base_price": false,
+    "position": 6,
+    "active": true,
+    "options": [
+      {
+        "id": 29,
+        "name": "Caja de regalo premium",
+        "description": "",
+        "price_delta": 3500.0,
+        "swatch": "#C9B8A8",
+        "image_url": "",
+        "active": true,
+        "position": 1,
+        "group_id": 6
+      },
+      {
+        "id": 30,
+        "name": "Tarjeta escrita a mano",
+        "description": "",
+        "price_delta": 1200.0,
+        "swatch": "#EFE6D8",
+        "image_url": "",
+        "active": true,
+        "position": 2,
+        "group_id": 6
+      },
+      {
+        "id": 31,
+        "name": "Porciones extra individuales",
+        "description": "Para los que se quedan con ganas",
+        "price_delta": 6000.0,
+        "swatch": "#E9A8A2",
+        "image_url": "",
+        "active": true,
+        "position": 3,
+        "group_id": 6
+      }
+    ]
+  }
+]

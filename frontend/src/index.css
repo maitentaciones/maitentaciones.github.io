@@ -1,0 +1,156 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Base editorial cálida y oscura */
+  --color-ink: #0d0a0b;
+  --color-ink-soft: #151011;
+  --color-ink-card: #1b1416;
+  --color-ink-line: #2c2224;
+  --color-cream: #f5ede4;
+  --color-cream-dim: #b9a99e;
+
+  /* Acentos pastel */
+  --color-rosa: #f2c6c2;
+  --color-cereza: #d98088;
+  --color-pistacho: #b8c9a0;
+  --color-limon: #e8dc8a;
+  --color-dulce: #d7a86e;
+  --color-cacao: #a9785f;
+  --color-vainilla: #efe0c4;
+  --color-lila: #cdbfe4;
+
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-rosa);
+    color: var(--color-ink);
+  }
+
+  /* Scrollbar en tono con la paleta */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-line);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-cacao);
+  }
+}
+
+@layer components {
+  /* Título editorial: serif óptico, muy apretado */
+  .display {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    letter-spacing: -0.03em;
+    line-height: 0.92;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-cream-dim);
+  }
+
+  .surface {
+    background: var(--color-ink-card);
+    border: 1px solid var(--color-ink-line);
+  }
+
+  /* Grano sutil sobre el fondo: evita el look "plano de plantilla" */
+  .grain::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* --- Animaciones ---------------------------------------------------------- */
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 38s linear infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(2deg);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reveal {
+  opacity: 0;
+}
+
+.reveal.is-visible {
+  animation: rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-float-slow {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+  }
+  .reveal.is-visible {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
