@@ -13,3 +13,11 @@ dist/
 
 # Configuración local de Claude Code
 .claude/settings.local.json
+
+# Nada que huela a credencial entra al repositorio
+*token*
+*secret*
+*password*
+*credential*
+*.pem
+*.key

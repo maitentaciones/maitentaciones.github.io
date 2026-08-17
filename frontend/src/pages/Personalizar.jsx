@@ -41,6 +41,9 @@ export default function Personalizar() {
 
   const chosen = (groupId) => selection[groupId] ?? []
 
+  /** Cuántas veces está elegida una opción (en los pasos de varias, puede repetirse). */
+  const countOf = (groupId, optionId) => chosen(groupId).filter((id) => id === optionId).length
+
   const toggle = (group, option) => {
     setSelection((prev) => {
       const current = prev[group.id] ?? []
@@ -50,12 +53,26 @@ export default function Personalizar() {
         return { ...prev, [group.id]: [option.id] }
       }
       if (current.includes(option.id)) {
-        return { ...prev, [group.id]: current.filter((id) => id !== option.id) }
+        // Quitamos una sola de sus repeticiones, no todas.
+        const ultima = current.lastIndexOf(option.id)
+        return {
+          ...prev,
+          [group.id]: [...current.slice(0, ultima), ...current.slice(ultima + 1)],
+        }
       }
       if (current.length >= group.max_choices) {
         // Al llegar al tope, la nueva elección reemplaza a la más antigua.
         return { ...prev, [group.id]: [...current.slice(1), option.id] }
       }
+      return { ...prev, [group.id]: [...current, option.id] }
+    })
+  }
+
+  /** Suma otra vez la misma opción: dos capas del mismo relleno, por ejemplo. */
+  const repetir = (group, option) => {
+    setSelection((prev) => {
+      const current = prev[group.id] ?? []
+      if (current.length >= group.max_choices) return prev
       return { ...prev, [group.id]: [...current, option.id] }
     })
   }
@@ -95,9 +112,18 @@ export default function Personalizar() {
 
   const summaryParts = groups
     .map((g) => {
-      const names = chosen(g.id)
-        .map((id) => optionById.get(id)?.name)
+      // Las repeticiones se muestran como "Dulce de leche ×2", no dos veces seguidas.
+      const veces = new Map()
+      chosen(g.id).forEach((id) => veces.set(id, (veces.get(id) ?? 0) + 1))
+
+      const names = [...veces.entries()]
+        .map(([id, cantidad]) => {
+          const nombre = optionById.get(id)?.name
+          if (!nombre) return null
+          return cantidad > 1 ? `${nombre} ×${cantidad}` : nombre
+        })
         .filter(Boolean)
+
       return names.length ? `${g.name}: ${names.join(' + ')}` : null
     })
     .filter(Boolean)
@@ -232,7 +258,8 @@ export default function Personalizar() {
                     <div className="px-6 pb-6">
                       {group.kind === 'multi' && (
                         <p className="mb-3 text-xs text-cream-dim">
-                          Podés elegir hasta {group.max_choices}.
+                          Podés elegir hasta {group.max_choices}. Si querés el mismo dos
+                          veces, tocá el <span className="text-rosa">×2</span>.
                           {chosen(group.id).length >= group.max_choices &&
                             ' Al llegar al tope, la nueva reemplaza a la primera.'}
                         </p>
@@ -240,30 +267,42 @@ export default function Personalizar() {
 
                       <div className="grid gap-2 sm:grid-cols-2">
                         {group.options.map((option) => {
-                          const selected = chosen(group.id).includes(option.id)
+                          const veces = countOf(group.id, option.id)
+                          const selected = veces > 0
+                          const hayCupo = chosen(group.id).length < group.max_choices
+                          const puedeRepetir = group.kind === 'multi' && selected && hayCupo
+
                           return (
-                            <button
+                            <div
                               key={option.id}
-                              type="button"
-                              onClick={() => toggle(group, option)}
-                              className={`group flex items-center gap-3 rounded-2xl border p-3 text-left transition-all duration-300 ${
+                              className={`group flex items-center gap-3 rounded-2xl border p-3 transition-all duration-300 ${
                                 selected
                                   ? 'border-rosa bg-rosa/10'
                                   : 'border-ink-line hover:border-cream-dim/40'
                               }`}
                             >
-                              <span
-                                className="h-9 w-9 shrink-0 rounded-full ring-1 ring-inset ring-white/15 transition-transform duration-300 group-hover:scale-110"
-                                style={{ backgroundColor: option.swatch }}
-                              />
-                              <span className="min-w-0 flex-1">
-                                <span className="block truncate text-sm">{option.name}</span>
-                                {option.description && (
-                                  <span className="block truncate text-xs text-cream-dim">
-                                    {option.description}
+                              <button
+                                type="button"
+                                onClick={() => toggle(group, option)}
+                                className="flex min-w-0 flex-1 items-center gap-3 text-left"
+                              >
+                                <span
+                                  className="h-9 w-9 shrink-0 rounded-full ring-1 ring-inset ring-white/15 transition-transform duration-300 group-hover:scale-110"
+                                  style={{ backgroundColor: option.swatch }}
+                                />
+                                <span className="min-w-0 flex-1">
+                                  <span className="block truncate text-sm">
+                                    {option.name}
+                                    {veces > 1 && <span className="text-rosa"> ×{veces}</span>}
                                   </span>
-                                )}
-                              </span>
+                                  {option.description && (
+                                    <span className="block truncate text-xs text-cream-dim">
+                                      {option.description}
+                                    </span>
+                                  )}
+                                </span>
+                              </button>
+
                               <span
                                 className={`shrink-0 text-xs tabular-nums ${
                                   selected ? 'text-rosa' : 'text-cream-dim'
@@ -272,10 +311,21 @@ export default function Personalizar() {
                                 {group.is_base_price
                                   ? money(option.price_delta)
                                   : option.price_delta > 0
-                                    ? `+${money(option.price_delta)}`
+                                    ? `+${money(option.price_delta * Math.max(veces, 1))}`
                                     : 'incluido'}
                               </span>
-                            </button>
+
+                              {puedeRepetir && (
+                                <button
+                                  type="button"
+                                  onClick={() => repetir(group, option)}
+                                  title={`Pedir ${option.name.toLowerCase()} dos veces`}
+                                  className="shrink-0 rounded-full border border-rosa/50 px-2 py-1 text-[11px] text-rosa transition-colors hover:bg-rosa hover:text-ink"
+                                >
+                                  ×2
+                                </button>
+                              )}
+                            </div>
                           )
                         })}
                       </div>
