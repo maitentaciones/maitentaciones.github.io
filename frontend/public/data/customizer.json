@@ -45,6 +45,17 @@
         "group_id": 1
       },
       {
+        "id": 33,
+        "name": "25 porciones",
+        "description": "Molde de 28 cm",
+        "price_delta": 58000.0,
+        "swatch": "#D98C86",
+        "image_url": "",
+        "active": true,
+        "position": 3,
+        "group_id": 1
+      },
+      {
         "id": 4,
         "name": "40 porciones",
         "description": "Dos pisos",

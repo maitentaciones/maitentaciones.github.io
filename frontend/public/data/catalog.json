@@ -21,7 +21,36 @@
         "active": true,
         "position": 1,
         "category_id": 1,
-        "category_slug": "tortas-clasicas"
+        "category_slug": "tortas-clasicas",
+        "variants": [
+          {
+            "id": 2,
+            "name": "Mediana",
+            "serves": "18 porciones",
+            "price": 46400.0,
+            "active": true,
+            "position": 1,
+            "product_id": 1
+          },
+          {
+            "id": 3,
+            "name": "Grande",
+            "serves": "24 porciones",
+            "price": 60800.0,
+            "active": true,
+            "position": 2,
+            "product_id": 1
+          },
+          {
+            "id": 1,
+            "name": "Porción",
+            "serves": "individual",
+            "price": 3500.0,
+            "active": true,
+            "position": 3,
+            "product_id": 1
+          }
+        ]
       },
       {
         "id": 2,
@@ -37,7 +66,36 @@
         "active": true,
         "position": 2,
         "category_id": 1,
-        "category_slug": "tortas-clasicas"
+        "category_slug": "tortas-clasicas",
+        "variants": [
+          {
+            "id": 5,
+            "name": "Mediana",
+            "serves": "18 porciones",
+            "price": 55100.0,
+            "active": true,
+            "position": 1,
+            "product_id": 2
+          },
+          {
+            "id": 6,
+            "name": "Grande",
+            "serves": "24 porciones",
+            "price": 72200.0,
+            "active": true,
+            "position": 2,
+            "product_id": 2
+          },
+          {
+            "id": 4,
+            "name": "Porción",
+            "serves": "individual",
+            "price": 4200.0,
+            "active": true,
+            "position": 3,
+            "product_id": 2
+          }
+        ]
       },
       {
         "id": 3,
@@ -53,7 +111,36 @@
         "active": true,
         "position": 3,
         "category_id": 1,
-        "category_slug": "tortas-clasicas"
+        "category_slug": "tortas-clasicas",
+        "variants": [
+          {
+            "id": 8,
+            "name": "Mediana",
+            "serves": "18 porciones",
+            "price": 42000.0,
+            "active": true,
+            "position": 1,
+            "product_id": 3
+          },
+          {
+            "id": 9,
+            "name": "Grande",
+            "serves": "24 porciones",
+            "price": 55100.0,
+            "active": true,
+            "position": 2,
+            "product_id": 3
+          },
+          {
+            "id": 7,
+            "name": "Porción",
+            "serves": "individual",
+            "price": 3200.0,
+            "active": true,
+            "position": 3,
+            "product_id": 3
+          }
+        ]
       },
       {
         "id": 4,
@@ -69,7 +156,36 @@
         "active": true,
         "position": 4,
         "category_id": 1,
-        "category_slug": "tortas-clasicas"
+        "category_slug": "tortas-clasicas",
+        "variants": [
+          {
+            "id": 11,
+            "name": "Mediana",
+            "serves": "18 porciones",
+            "price": 52200.0,
+            "active": true,
+            "position": 1,
+            "product_id": 4
+          },
+          {
+            "id": 12,
+            "name": "Grande",
+            "serves": "24 porciones",
+            "price": 68400.0,
+            "active": true,
+            "position": 2,
+            "product_id": 4
+          },
+          {
+            "id": 10,
+            "name": "Porción",
+            "serves": "individual",
+            "price": 4000.0,
+            "active": true,
+            "position": 3,
+            "product_id": 4
+          }
+        ]
       },
       {
         "id": 5,
@@ -85,7 +201,36 @@
         "active": true,
         "position": 5,
         "category_id": 1,
-        "category_slug": "tortas-clasicas"
+        "category_slug": "tortas-clasicas",
+        "variants": [
+          {
+            "id": 14,
+            "name": "Mediana",
+            "serves": "18 porciones",
+            "price": 59400.0,
+            "active": true,
+            "position": 1,
+            "product_id": 5
+          },
+          {
+            "id": 15,
+            "name": "Grande",
+            "serves": "24 porciones",
+            "price": 77900.0,
+            "active": true,
+            "position": 2,
+            "product_id": 5
+          },
+          {
+            "id": 13,
+            "name": "Porción",
+            "serves": "individual",
+            "price": 4500.0,
+            "active": true,
+            "position": 3,
+            "product_id": 5
+          }
+        ]
       },
       {
         "id": 6,
@@ -101,7 +246,36 @@
         "active": true,
         "position": 6,
         "category_id": 1,
-        "category_slug": "tortas-clasicas"
+        "category_slug": "tortas-clasicas",
+        "variants": [
+          {
+            "id": 17,
+            "name": "Mediana",
+            "serves": "18 porciones",
+            "price": 56600.0,
+            "active": true,
+            "position": 1,
+            "product_id": 6
+          },
+          {
+            "id": 18,
+            "name": "Grande",
+            "serves": "24 porciones",
+            "price": 74100.0,
+            "active": true,
+            "position": 2,
+            "product_id": 6
+          },
+          {
+            "id": 16,
+            "name": "Porción",
+            "serves": "individual",
+            "price": 4300.0,
+            "active": true,
+            "position": 3,
+            "product_id": 6
+          }
+        ]
       },
       {
         "id": 7,
@@ -117,7 +291,36 @@
         "active": true,
         "position": 7,
         "category_id": 1,
-        "category_slug": "tortas-clasicas"
+        "category_slug": "tortas-clasicas",
+        "variants": [
+          {
+            "id": 20,
+            "name": "Mediana",
+            "serves": "18 porciones",
+            "price": 49300.0,
+            "active": true,
+            "position": 1,
+            "product_id": 7
+          },
+          {
+            "id": 21,
+            "name": "Grande",
+            "serves": "24 porciones",
+            "price": 64600.0,
+            "active": true,
+            "position": 2,
+            "product_id": 7
+          },
+          {
+            "id": 19,
+            "name": "Porción",
+            "serves": "individual",
+            "price": 3700.0,
+            "active": true,
+            "position": 3,
+            "product_id": 7
+          }
+        ]
       },
       {
         "id": 8,
@@ -133,7 +336,36 @@
         "active": true,
         "position": 8,
         "category_id": 1,
-        "category_slug": "tortas-clasicas"
+        "category_slug": "tortas-clasicas",
+        "variants": [
+          {
+            "id": 23,
+            "name": "Mediana",
+            "serves": "18 porciones",
+            "price": 53600.0,
+            "active": true,
+            "position": 1,
+            "product_id": 8
+          },
+          {
+            "id": 24,
+            "name": "Grande",
+            "serves": "24 porciones",
+            "price": 70300.0,
+            "active": true,
+            "position": 2,
+            "product_id": 8
+          },
+          {
+            "id": 22,
+            "name": "Porción",
+            "serves": "individual",
+            "price": 4100.0,
+            "active": true,
+            "position": 3,
+            "product_id": 8
+          }
+        ]
       }
     ]
   },
@@ -159,7 +391,8 @@
         "active": true,
         "position": 1,
         "category_id": 2,
-        "category_slug": "cookies"
+        "category_slug": "cookies",
+        "variants": []
       },
       {
         "id": 10,
@@ -175,7 +408,8 @@
         "active": true,
         "position": 2,
         "category_id": 2,
-        "category_slug": "cookies"
+        "category_slug": "cookies",
+        "variants": []
       },
       {
         "id": 11,
@@ -191,7 +425,8 @@
         "active": true,
         "position": 3,
         "category_id": 2,
-        "category_slug": "cookies"
+        "category_slug": "cookies",
+        "variants": []
       },
       {
         "id": 12,
@@ -207,7 +442,8 @@
         "active": true,
         "position": 4,
         "category_id": 2,
-        "category_slug": "cookies"
+        "category_slug": "cookies",
+        "variants": []
       }
     ]
   },
@@ -233,7 +469,8 @@
         "active": true,
         "position": 1,
         "category_id": 3,
-        "category_slug": "bizcochuelos"
+        "category_slug": "bizcochuelos",
+        "variants": []
       },
       {
         "id": 14,
@@ -249,7 +486,8 @@
         "active": true,
         "position": 2,
         "category_id": 3,
-        "category_slug": "bizcochuelos"
+        "category_slug": "bizcochuelos",
+        "variants": []
       },
       {
         "id": 15,
@@ -265,7 +503,8 @@
         "active": true,
         "position": 3,
         "category_id": 3,
-        "category_slug": "bizcochuelos"
+        "category_slug": "bizcochuelos",
+        "variants": []
       }
     ]
   },
@@ -291,7 +530,8 @@
         "active": true,
         "position": 1,
         "category_id": 4,
-        "category_slug": "mesa-dulce"
+        "category_slug": "mesa-dulce",
+        "variants": []
       },
       {
         "id": 17,
@@ -307,7 +547,8 @@
         "active": true,
         "position": 2,
         "category_id": 4,
-        "category_slug": "mesa-dulce"
+        "category_slug": "mesa-dulce",
+        "variants": []
       },
       {
         "id": 18,
@@ -323,7 +564,8 @@
         "active": true,
         "position": 3,
         "category_id": 4,
-        "category_slug": "mesa-dulce"
+        "category_slug": "mesa-dulce",
+        "variants": []
       }
     ]
   }
