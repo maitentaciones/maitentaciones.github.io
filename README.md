@@ -48,9 +48,22 @@ Desde el panel se maneja todo sin tocar código:
 | Pestaña | Para qué sirve |
 | --- | --- |
 | Pedidos | Ver los encargos que entraron, cambiar su estado y escribirle al cliente |
-| Productos | Cargar tortas, cookies, precios, fotos y qué se muestra en la portada |
+| Productos | Cargar tortas, cookies, precios, tamaños, fotos y qué se muestra en la portada |
 | Categorías | Las secciones de la vitrina |
 | Personalizador | Los pasos del armador de tortas y el precio de cada opción |
+
+### Tamaños con distinto precio
+
+Dentro de **Productos → editar** hay una sección «Tamaños y precios». Sirve para vender
+un mismo producto en varias medidas: las tortas clásicas vienen con Mediana (18
+porciones), Grande (24) y Porción individual, cada una con su precio.
+
+- El cliente los ve como botones en la tarjeta y el precio cambia al elegir.
+- **El primero de la lista es el que se muestra al entrar**; se reordena con las flechas.
+- Los cambios se guardan solos, sin apretar Guardar.
+- Un producto **sin tamaños** se vende con el precio único de arriba, como las cookies
+  o los bizcochuelos. Se pueden agregar tamaños a cualquier producto, no solo a tortas.
+- El tamaño elegido viaja en el pedido de WhatsApp: «Chocotorta — Grande · 24 porciones».
 
 ## Configuración de la marca
 

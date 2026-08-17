@@ -91,6 +91,11 @@ export const api = {
     deleteCategory: (id) =>
       request(`/api/admin/categories/${id}`, { method: 'DELETE', auth: true }),
 
+    createVariant: (b) => request('/api/admin/variants', { method: 'POST', body: b, auth: true }),
+    updateVariant: (id, b) =>
+      request(`/api/admin/variants/${id}`, { method: 'PATCH', body: b, auth: true }),
+    deleteVariant: (id) => request(`/api/admin/variants/${id}`, { method: 'DELETE', auth: true }),
+
     products: () => request('/api/admin/products', { auth: true }),
     createProduct: (b) => request('/api/admin/products', { method: 'POST', body: b, auth: true }),
     updateProduct: (id, b) =>

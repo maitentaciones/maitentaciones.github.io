@@ -54,6 +54,19 @@ def build_payload(db) -> dict:
                         "position": p.position,
                         "category_id": p.category_id,
                         "category_slug": category.slug,
+                        "variants": [
+                            {
+                                "id": v.id,
+                                "name": v.name,
+                                "serves": v.serves,
+                                "price": v.price,
+                                "active": v.active,
+                                "position": v.position,
+                                "product_id": v.product_id,
+                            }
+                            for v in sorted(p.variants, key=lambda v: (v.position, v.name))
+                            if v.active
+                        ],
                     }
                     for p in products
                 ],

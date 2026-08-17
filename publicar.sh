@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Publica la web en GitHub Pages con el catálogo tal como está hoy en el panel.
+# Publica la web en GitHub Pages con todo lo que haya cambiado: el catálogo del
+# panel y cualquier cambio en el código.
 #
 #   1. exporta el catálogo a archivos JSON
-#   2. los sube a GitHub
+#   2. sube todo lo pendiente a GitHub
 #   3. GitHub construye y publica la página (tarda ~2 minutos)
 set -euo pipefail
 
@@ -17,16 +18,30 @@ fi
 echo "→ Exportando el catálogo…"
 (cd backend && ../.venv/bin/python -m app.export_static)
 
-if git diff --quiet -- frontend/public/data && git diff --cached --quiet -- frontend/public/data; then
+# Miramos todo el proyecto, no solo el catálogo: si cambió el código también
+# hay que subirlo, si no la web publicada queda con la versión vieja.
+if [ -z "$(git status --porcelain)" ]; then
   echo
-  echo "El catálogo publicado ya está al día, no hay cambios que subir."
+  echo "La página publicada ya está al día, no hay cambios que subir."
   exit 0
 fi
 
 echo
-echo "→ Subiendo los cambios…"
-git add frontend/public/data
-git commit -m "Actualizar catálogo publicado"
+echo "→ Cambios que se van a publicar:"
+git status --short
+echo
+
+git add -A
+
+# Un mensaje que describa qué se está publicando.
+if git diff --cached --name-only | grep -qv '^frontend/public/data/'; then
+  mensaje="Actualizar la web"
+else
+  mensaje="Actualizar catálogo publicado"
+fi
+
+echo "→ Subiendo…"
+git commit -m "$mensaje"
 git push
 
 echo

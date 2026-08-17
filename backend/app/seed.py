@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from .auth import hash_password
 from .config import settings
 from .database import Base, SessionLocal, engine
-from .models import AdminUser, Category, Option, OptionGroup, Product
+from .models import AdminUser, Category, Option, OptionGroup, Product, ProductVariant
 
 CATEGORIES = [
     {
@@ -330,6 +330,38 @@ OPTION_GROUPS = [
 ]
 
 
+# Tamaños de las tortas clásicas. El precio sale del precio base del producto
+# (que corresponde a la torta entera), redondeado a la centena.
+def _tamanos_de_torta(precio_base: float) -> list[dict]:
+    def redondear(valor: float) -> float:
+        return round(valor / 100) * 100
+
+    # La torta entera va primero: es la que se muestra al entrar a la vitrina.
+    return [
+        {"name": "Mediana", "serves": "18 porciones", "price": redondear(precio_base * 1.45)},
+        {"name": "Grande", "serves": "24 porciones", "price": redondear(precio_base * 1.9)},
+        {"name": "Porción", "serves": "individual", "price": redondear(precio_base * 0.11)},
+    ]
+
+
+def seed_tamanos(db: Session) -> int:
+    """Carga los tamaños de las tortas clásicas que todavía no los tengan."""
+    tortas = (
+        db.query(Product)
+        .join(Category)
+        .filter(Category.slug == "tortas-clasicas")
+        .all()
+    )
+    creados = 0
+    for torta in tortas:
+        if torta.variants:
+            continue
+        for index, tamano in enumerate(_tamanos_de_torta(torta.price), start=1):
+            db.add(ProductVariant(product_id=torta.id, position=index, **tamano))
+            creados += 1
+    return creados
+
+
 def seed(db: Session) -> None:
     if not db.query(AdminUser).first():
         db.add(
@@ -373,12 +405,18 @@ def seed(db: Session) -> None:
             if not exists:
                 db.add(Option(group_id=group.id, position=index, **option_data))
 
+    db.flush()
+    nuevos_tamanos = seed_tamanos(db)
+
     db.commit()
     print(
         f"Listo: {db.query(Category).count()} categorías, "
         f"{db.query(Product).count()} productos, "
+        f"{db.query(ProductVariant).count()} tamaños, "
         f"{db.query(Option).count()} opciones de personalización."
     )
+    if nuevos_tamanos:
+        print(f"  (se agregaron {nuevos_tamanos} tamaños nuevos a las tortas clásicas)")
 
 
 def main() -> None:

@@ -9,6 +9,7 @@ from ..schemas import (
     OptionGroupOut,
     OptionOut,
     ProductOut,
+    VariantOut,
 )
 
 router = APIRouter(prefix="/api", tags=["catálogo"])
@@ -24,6 +25,17 @@ def list_categories(db: Session = Depends(get_db)):
     )
 
 
+def _product_out(product: Product) -> ProductOut:
+    """Al público solo le mostramos los tamaños disponibles."""
+    data = ProductOut.model_validate(product)
+    data.variants = [
+        VariantOut.model_validate(v)
+        for v in sorted(product.variants, key=lambda v: (v.position, v.name))
+        if v.active
+    ]
+    return data
+
+
 @router.get("/products", response_model=list[ProductOut])
 def list_products(
     category: str | None = Query(default=None, description="slug de la categoría"),
@@ -35,7 +47,8 @@ def list_products(
         query = query.filter(Category.slug == category)
     if featured is not None:
         query = query.filter(Product.featured.is_(featured))
-    return query.order_by(Product.position, Product.name).all()
+    products = query.order_by(Product.position, Product.name).all()
+    return [_product_out(p) for p in products]
 
 
 @router.get("/products/{slug}", response_model=ProductOut)
@@ -45,7 +58,7 @@ def get_product(slug: str, db: Session = Depends(get_db)):
     )
     if not product:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
-    return product
+    return _product_out(product)
 
 
 @router.get("/catalog", response_model=list[CategoryWithProducts])
@@ -64,7 +77,7 @@ def full_catalog(db: Session = Depends(get_db)):
             key=lambda p: (p.position, p.name),
         )
         data = CategoryWithProducts.model_validate(cat)
-        data.products = [ProductOut.model_validate(p) for p in products]
+        data.products = [_product_out(p) for p in products]
         result.append(data)
     return result
 

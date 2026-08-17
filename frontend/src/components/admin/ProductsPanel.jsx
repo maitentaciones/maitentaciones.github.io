@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { api, money } from '../../lib/api'
 import { ACCENT_NAMES, accentHex } from '../../lib/accents'
 import { Button, Field, Modal, Panel } from './ui'
+import VariantsEditor from './VariantsEditor'
 
 const slugify = (text) =>
   text
@@ -60,10 +61,11 @@ export default function ProductsPanel({ onError }) {
         category_id: Number(editing.category_id),
       }
       if (editing.id) {
-        const { id, category_slug, ...body } = payload
+        const { id, category_slug, variants, ...body } = payload
         await api.admin.updateProduct(id, body)
       } else {
-        await api.admin.createProduct(payload)
+        const { variants, ...body } = payload
+        await api.admin.createProduct(body)
       }
       setEditing(null)
       await load()
@@ -263,6 +265,14 @@ export default function ProductsPanel({ onError }) {
                 />
                 Visible en la web
               </label>
+            </div>
+
+            <div className="col-span-2 border-t border-ink-line pt-5">
+              <VariantsEditor
+                product={editing}
+                onError={onError}
+                onChange={(variants) => setEditing((p) => ({ ...p, variants }))}
+              />
             </div>
           </div>
         )}

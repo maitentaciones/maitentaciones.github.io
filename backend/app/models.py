@@ -52,9 +52,35 @@ class Product(Base):
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id", ondelete="CASCADE"))
     category: Mapped[Category] = relationship(back_populates="products")
 
+    # Tamaños con precio propio (porción, mediana, grande). Si no hay ninguno,
+    # el producto se vende con el precio único de arriba.
+    variants: Mapped[list["ProductVariant"]] = relationship(
+        back_populates="product",
+        cascade="all, delete-orphan",
+        order_by="ProductVariant.position",
+    )
+
     @property
     def category_slug(self) -> str:
         return self.category.slug if self.category else ""
+
+
+class ProductVariant(Base):
+    """Un tamaño concreto de un producto, con su propio precio."""
+
+    __tablename__ = "product_variants"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    # Etiqueta corta, la que se ve en el botón: "Porción", "Mediana", "Grande".
+    name: Mapped[str] = mapped_column(String(60))
+    # Aclaración debajo del precio: "18 porciones", "24 porciones".
+    serves: Mapped[str] = mapped_column(String(60), default="")
+    price: Mapped[float] = mapped_column(Float, default=0)
+    active: Mapped[bool] = mapped_column(Boolean, default=True)
+    position: Mapped[int] = mapped_column(Integer, default=0)
+
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.id", ondelete="CASCADE"))
+    product: Mapped[Product] = relationship(back_populates="variants")
 
 
 class OptionGroup(Base):

@@ -10,6 +10,32 @@ class ORMModel(BaseModel):
 # --- Catálogo ---------------------------------------------------------------
 
 
+class VariantBase(BaseModel):
+    name: str
+    serves: str = ""
+    price: float = 0
+    active: bool = True
+    position: int = 0
+    product_id: int
+
+
+class VariantCreate(VariantBase):
+    pass
+
+
+class VariantUpdate(BaseModel):
+    name: str | None = None
+    serves: str | None = None
+    price: float | None = None
+    active: bool | None = None
+    position: int | None = None
+    product_id: int | None = None
+
+
+class VariantOut(ORMModel, VariantBase):
+    id: int
+
+
 class ProductBase(BaseModel):
     slug: str
     name: str
@@ -47,6 +73,7 @@ class ProductUpdate(BaseModel):
 class ProductOut(ORMModel, ProductBase):
     id: int
     category_slug: str = ""
+    variants: list[VariantOut] = []
 
 
 class CategoryBase(BaseModel):

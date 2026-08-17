@@ -3,7 +3,15 @@ from sqlalchemy.orm import Session
 
 from ..auth import create_access_token, current_admin, verify_password
 from ..database import get_db
-from ..models import AdminUser, Category, Option, OptionGroup, Order, Product
+from ..models import (
+    AdminUser,
+    Category,
+    Option,
+    OptionGroup,
+    Order,
+    Product,
+    ProductVariant,
+)
 from ..schemas import (
     CategoryCreate,
     CategoryOut,
@@ -21,6 +29,9 @@ from ..schemas import (
     ProductOut,
     ProductUpdate,
     TokenOut,
+    VariantCreate,
+    VariantOut,
+    VariantUpdate,
 )
 
 auth_router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -126,6 +137,37 @@ def update_product(product_id: int, payload: ProductUpdate, db: Session = Depend
 def delete_product(product_id: int, db: Session = Depends(get_db)):
     product = _get_or_404(db, Product, product_id, "Producto")
     db.delete(product)
+    db.commit()
+
+
+# --- Tamaños de un producto -------------------------------------------------
+
+
+@router.post("/variants", response_model=VariantOut, status_code=201)
+def create_variant(payload: VariantCreate, db: Session = Depends(get_db)):
+    _get_or_404(db, Product, payload.product_id, "Producto")
+    variant = ProductVariant(**payload.model_dump())
+    db.add(variant)
+    db.commit()
+    db.refresh(variant)
+    return variant
+
+
+@router.patch("/variants/{variant_id}", response_model=VariantOut)
+def update_variant(variant_id: int, payload: VariantUpdate, db: Session = Depends(get_db)):
+    variant = _get_or_404(db, ProductVariant, variant_id, "Tamaño")
+    if payload.product_id is not None:
+        _get_or_404(db, Product, payload.product_id, "Producto")
+    _apply(variant, payload)
+    db.commit()
+    db.refresh(variant)
+    return variant
+
+
+@router.delete("/variants/{variant_id}", status_code=204)
+def delete_variant(variant_id: int, db: Session = Depends(get_db)):
+    variant = _get_or_404(db, ProductVariant, variant_id, "Tamaño")
+    db.delete(variant)
     db.commit()
 
 
