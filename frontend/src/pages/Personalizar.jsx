@@ -68,12 +68,32 @@ export default function Personalizar() {
     })
   }
 
-  /** Suma otra vez la misma opción: dos capas del mismo relleno, por ejemplo. */
-  const repetir = (group, option) => {
+  /**
+   * El ×2 de una opción: la pide dos veces. Si ya no queda cupo, desplaza a la
+   * otra elegida, porque pedir "este dos veces" implica dejar solo este.
+   * Si ya estaba duplicada, vuelve a una.
+   */
+  const alternarRepetir = (group, option) => {
     setSelection((prev) => {
       const current = prev[group.id] ?? []
-      if (current.length >= group.max_choices) return prev
-      return { ...prev, [group.id]: [...current, option.id] }
+      const veces = current.filter((id) => id === option.id).length
+
+      if (veces > 1) {
+        const ultima = current.lastIndexOf(option.id)
+        return {
+          ...prev,
+          [group.id]: [...current.slice(0, ultima), ...current.slice(ultima + 1)],
+        }
+      }
+
+      if (current.length < group.max_choices) {
+        return { ...prev, [group.id]: [...current, option.id] }
+      }
+
+      const otro = current.findIndex((id) => id !== option.id)
+      if (otro === -1) return prev
+      const sinElOtro = [...current.slice(0, otro), ...current.slice(otro + 1)]
+      return { ...prev, [group.id]: [...sinElOtro, option.id] }
     })
   }
 
@@ -110,20 +130,23 @@ export default function Personalizar() {
   const coat = swatchesOf('cobertura')[0]
   const decorations = [...swatchesOf('decoracion'), ...swatchesOf('extras')]
 
+  /** Nombres de lo elegido en un paso, con las repeticiones como "Dulce de leche ×2". */
+  const elegidosDe = (groupId) => {
+    const veces = new Map()
+    chosen(groupId).forEach((id) => veces.set(id, (veces.get(id) ?? 0) + 1))
+
+    return [...veces.entries()]
+      .map(([id, cantidad]) => {
+        const nombre = optionById.get(id)?.name
+        if (!nombre) return null
+        return cantidad > 1 ? `${nombre} ×${cantidad}` : nombre
+      })
+      .filter(Boolean)
+  }
+
   const summaryParts = groups
     .map((g) => {
-      // Las repeticiones se muestran como "Dulce de leche ×2", no dos veces seguidas.
-      const veces = new Map()
-      chosen(g.id).forEach((id) => veces.set(id, (veces.get(id) ?? 0) + 1))
-
-      const names = [...veces.entries()]
-        .map(([id, cantidad]) => {
-          const nombre = optionById.get(id)?.name
-          if (!nombre) return null
-          return cantidad > 1 ? `${nombre} ×${cantidad}` : nombre
-        })
-        .filter(Boolean)
-
+      const names = elegidosDe(g.id)
       return names.length ? `${g.name}: ${names.join(' + ')}` : null
     })
     .filter(Boolean)
@@ -202,9 +225,7 @@ export default function Personalizar() {
         <div className="space-y-4">
           {groups.map((group, index) => {
             const isOpen = step === index
-            const picked = chosen(group.id)
-              .map((id) => optionById.get(id)?.name)
-              .filter(Boolean)
+            const picked = elegidosDe(group.id)
 
             return (
               <section
@@ -258,10 +279,8 @@ export default function Personalizar() {
                     <div className="px-6 pb-6">
                       {group.kind === 'multi' && (
                         <p className="mb-3 text-xs text-cream-dim">
-                          Podés elegir hasta {group.max_choices}. Si querés el mismo dos
-                          veces, tocá el <span className="text-rosa">×2</span>.
-                          {chosen(group.id).length >= group.max_choices &&
-                            ' Al llegar al tope, la nueva reemplaza a la primera.'}
+                          Podés elegir hasta {group.max_choices}. Para pedir dos capas del
+                          mismo, tocá el <span className="text-rosa">×2</span> de esa opción.
                         </p>
                       )}
 
@@ -269,8 +288,10 @@ export default function Personalizar() {
                         {group.options.map((option) => {
                           const veces = countOf(group.id, option.id)
                           const selected = veces > 0
-                          const hayCupo = chosen(group.id).length < group.max_choices
-                          const puedeRepetir = group.kind === 'multi' && selected && hayCupo
+                          // El ×2 acompaña a la opción elegida, haya o no cupo libre:
+                          // pedir "este dos veces" desplaza al otro si hace falta.
+                          const puedeRepetir =
+                            group.kind === 'multi' && selected && group.max_choices > 1
 
                           return (
                             <div
@@ -291,10 +312,7 @@ export default function Personalizar() {
                                   style={{ backgroundColor: option.swatch }}
                                 />
                                 <span className="min-w-0 flex-1">
-                                  <span className="block truncate text-sm">
-                                    {option.name}
-                                    {veces > 1 && <span className="text-rosa"> ×{veces}</span>}
-                                  </span>
+                                  <span className="block truncate text-sm">{option.name}</span>
                                   {option.description && (
                                     <span className="block truncate text-xs text-cream-dim">
                                       {option.description}
@@ -318,9 +336,18 @@ export default function Personalizar() {
                               {puedeRepetir && (
                                 <button
                                   type="button"
-                                  onClick={() => repetir(group, option)}
-                                  title={`Pedir ${option.name.toLowerCase()} dos veces`}
-                                  className="shrink-0 rounded-full border border-rosa/50 px-2 py-1 text-[11px] text-rosa transition-colors hover:bg-rosa hover:text-ink"
+                                  onClick={() => alternarRepetir(group, option)}
+                                  aria-pressed={veces > 1}
+                                  title={
+                                    veces > 1
+                                      ? `Volver a una capa de ${option.name.toLowerCase()}`
+                                      : `Pedir ${option.name.toLowerCase()} dos veces`
+                                  }
+                                  className={`shrink-0 rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
+                                    veces > 1
+                                      ? 'border-rosa bg-rosa font-medium text-ink'
+                                      : 'border-rosa/50 text-rosa hover:bg-rosa/20'
+                                  }`}
                                 >
                                   ×2
                                 </button>
