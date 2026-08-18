@@ -24,6 +24,26 @@ const darken = (hex, amount = 0.18) => {
   return `rgb(${r | 0}, ${g | 0}, ${b | 0})`
 }
 
+/** Reparte el alto de un piso en capas de bizcocho separadas por relleno. */
+function armarCapas(top, alto, spongeColor, fillingColors) {
+  const fills = fillingColors.length ? fillingColors : ['#b07a4e']
+  const layerCount = fills.length + 1
+  const fillH = Math.min(9, alto / (layerCount * 3))
+  const spongeH = (alto - fills.length * fillH) / layerCount
+
+  const capas = []
+  let y = top
+  for (let i = 0; i < layerCount; i += 1) {
+    capas.push({ type: 'sponge', y, h: spongeH, color: spongeColor })
+    y += spongeH
+    if (i < fills.length) {
+      capas.push({ type: 'fill', y, h: fillH, color: fills[i] })
+      y += fillH
+    }
+  }
+  return capas
+}
+
 export default function CakePreview({
   sizeIndex = 0,
   spongeColor = '#f4e4c1',
@@ -31,10 +51,15 @@ export default function CakePreview({
   coating = { name: '', color: '#f3e3d7' },
   decorations = [],
   message = '',
+  // Ingredientes propios del piso de arriba. Si no vienen, repite los de abajo.
+  topTier = null,
+  // Cantidad de pisos; si no se indica, sale del tamaño elegido.
+  tiers: tiersProp = null,
 }) {
   const uid = useId().replace(/:/g, '')
   const size = TIERS[Math.min(sizeIndex, TIERS.length - 1)] ?? TIERS[0]
-  const { w, h, tiers } = size
+  const { w, h } = size
+  const tiers = tiersProp ?? size.tiers
 
   const cx = 160
   const baseY = 300
@@ -48,22 +73,19 @@ export default function CakePreview({
   const isMerengue = coatName.includes('merengue')
   const coatColor = coating?.color ?? '#f3e3d7'
 
-  // Capas internas: n rellenos generan n+1 capas de bizcochuelo.
-  const fills = fillingColors.length ? fillingColors : ['#b07a4e']
-  const layerCount = fills.length + 1
-  const fillH = 9
-  const spongeH = (h - fills.length * fillH) / layerCount
+  const layers = armarCapas(topY, h, spongeColor, fillingColors)
 
-  const layers = []
-  let y = topY
-  for (let i = 0; i < layerCount; i += 1) {
-    layers.push({ type: 'sponge', y, h: spongeH, color: spongeColor })
-    y += spongeH
-    if (i < fills.length) {
-      layers.push({ type: 'fill', y, h: fillH, color: fills[i] })
-      y += fillH
-    }
-  }
+  // --- Piso de arriba: usa sus propios ingredientes o repite los de abajo ---
+  const arribaAlto = 66
+  const arribaTop = topY - arribaAlto
+  const arribaAncho = w * 0.64
+  const arribaX = cx - arribaAncho / 2
+  const arribaSponge = topTier?.spongeColor ?? spongeColor
+  const arribaFills = topTier?.fillingColors?.length ? topTier.fillingColors : fillingColors
+  const arribaCoatName = (topTier?.coating?.name ?? coating?.name ?? '').toLowerCase()
+  const arribaCoatColor = topTier?.coating?.color ?? coatColor
+  const arribaNaked = arribaCoatName.includes('naked')
+  const arribaCapas = armarCapas(arribaTop, arribaAlto, arribaSponge, arribaFills)
 
   // Cuña extraída del frente derecho: por ahí se ve el interior.
   const sliceLeft = cx
@@ -110,6 +132,9 @@ export default function CakePreview({
         <clipPath id={`slice-${uid}`}>
           <path d={slicePath} />
         </clipPath>
+        <clipPath id={`cut-top-${uid}`}>
+          <rect x={cx} y={arribaTop - 2} width={arribaAncho} height={arribaAlto + 4} />
+        </clipPath>
         <linearGradient id={`shine-${uid}`} x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="#000" stopOpacity="0.22" />
           <stop offset="45%" stopColor="#fff" stopOpacity="0.14" />
@@ -130,31 +155,69 @@ export default function CakePreview({
       <ellipse cx={cx} cy={baseY + 4} rx={w * 0.6} ry={10} fill="#2b2124" opacity="0.7" />
 
       <g style={{ transition: 'transform 500ms cubic-bezier(.22,1,.36,1)' }}>
-        {/* Piso superior cuando la torta es de dos pisos */}
+        {/* Piso superior, con su propio corte a la vista */}
         {tiers === 2 && (
           <g>
             <rect
-              x={cx - w * 0.32}
-              y={topY - 66}
-              width={w * 0.64}
-              height={66}
+              x={arribaX}
+              y={arribaTop}
+              width={arribaAncho}
+              height={arribaAlto}
               rx={4}
-              fill={isNaked ? spongeColor : coatColor}
+              fill={arribaNaked ? arribaSponge : arribaCoatColor}
               style={{ transition: 'fill 400ms ease' }}
             />
+
+            <g clipPath={`url(#cut-top-${uid})`}>
+              {arribaCapas.map((capa, i) => (
+                <rect
+                  key={`at-${i}`}
+                  x={arribaX}
+                  y={capa.y}
+                  width={arribaAncho}
+                  height={capa.h + 0.4}
+                  fill={capa.color}
+                  style={{ transition: 'fill 400ms ease' }}
+                />
+              ))}
+              <rect x={cx} y={arribaTop} width={3} height={arribaAlto} fill="#000" opacity="0.2" />
+            </g>
+
+            {arribaNaked &&
+              arribaCapas
+                .filter((c) => c.type === 'fill')
+                .map((capa, i) => (
+                  <rect
+                    key={`atn-${i}`}
+                    x={arribaX}
+                    y={capa.y}
+                    width={arribaAncho}
+                    height={capa.h}
+                    fill={capa.color}
+                    opacity="0.95"
+                  />
+                ))}
+
             <rect
-              x={cx - w * 0.32}
-              y={topY - 66}
-              width={w * 0.64}
-              height={66}
+              x={arribaX}
+              y={arribaTop}
+              width={arribaAncho}
+              height={arribaAlto}
               rx={4}
               fill={`url(#shine-${uid})`}
             />
-            <ellipse cx={cx} cy={topY - 66} rx={w * 0.32} ry={ry * 0.6} fill={isNaked ? spongeColor : coatColor} />
             <ellipse
               cx={cx}
-              cy={topY - 66}
-              rx={w * 0.32}
+              cy={arribaTop}
+              rx={arribaAncho / 2}
+              ry={ry * 0.6}
+              fill={arribaNaked ? arribaSponge : arribaCoatColor}
+              style={{ transition: 'fill 400ms ease' }}
+            />
+            <ellipse
+              cx={cx}
+              cy={arribaTop}
+              rx={arribaAncho / 2}
               ry={ry * 0.6}
               fill="#fff"
               opacity="0.12"
